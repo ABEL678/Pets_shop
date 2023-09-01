@@ -1,0 +1,23 @@
+{% extends 'catalog/base.html' %}
+{% load my_tags %}
+{% block content%}
+
+    <div class="container">
+        <div class="row">
+            <!-- Левая часть с изображением -->
+            <div class="col-md-4">
+                <img src="{{ object.image|mymedia }}" alt="Изображение товара" class="img-fluid">
+            </div>
+
+            <!-- Правая часть с информацией о товаре -->
+            <div class="col-md-8">
+                <h2>{{ product.title }}</h2>
+                <p>Описание товара: {{ product.text }}</p>
+                <p>Цена: {{ product.price }} руб.</p>
+                <button class="btn btn-primary">Положить в корзину</button>
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}

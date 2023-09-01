@@ -1,12 +1,13 @@
 {% extends 'catalog/base.html' %}
-
+{% load my_tags %}
 {% block content %}
   <div class="card-deck mb-3 text-center">
     {% for object in object_list %}
         <div class="card mb-4 box-shadow">
           <div class="card-header">
-            <img src="{{ object.image|mymedia }}"
-                     alt="Изображение товара" class="img-fluid">
+            <img class="card-img-top"
+                    src="{{ object.image|mymedia }}"
+                    alt="Изображение товара">
           </div>
           <div class="card-body">
             <h1 class="card-title pricing-card-title">{{ object.product_name|title }}</h1>
