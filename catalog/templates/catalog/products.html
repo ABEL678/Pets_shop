@@ -1,0 +1,20 @@
+{% extends 'catalog/base.html' %}
+
+{% block content %}
+  <div class="card-deck mb-3 text-center">
+    {% for object in object_list %}
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <img src="{{ object.image|mymedia }}"
+                     alt="Изображение товара" class="img-fluid">
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">{{ object.product_name|title }}</h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>10 users included</li>
+            </ul>
+          </div>
+        </div>
+    {% endfor %}
+  </div>
+{% endblock %}
