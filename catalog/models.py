@@ -1,7 +1,17 @@
 from django.db import models
+from django.conf import settings
 
 
 class Product(models.Model):
+    STATUS_CREATED = 'created'
+    STATUS_MODERATED = 'moderated'
+    STATUS_PUBLISH = 'published'
+    STATUSES = (
+        (STATUS_CREATED, 'Добавлен'),
+        (STATUS_MODERATED, 'На модерации'),
+        (STATUS_PUBLISH, 'Опубликован'),
+    )
+
     product_name = models.CharField(max_length=150, verbose_name='наименование')
     description = models.TextField(max_length=400, verbose_name='описание')
     image = models.ImageField(upload_to='catalog/', verbose_name='изображение', null=True, blank=True)
@@ -9,6 +19,9 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='цена за покупку')
     date_of_add = models.DateField(auto_now=False, auto_now_add=True, verbose_name='дата создания')
     date_last_change = models.DateField(auto_now=True, auto_now_add=False, verbose_name='дата создания')
+
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='владелец', null=True, blank=True)
+    status = models.CharField(max_length=20, choices=STATUSES, default=STATUS_MODERATED, verbose_name='статус')
 
     def __str__(self):
         return f'{self.product_name} {self.price} {self.category}'
@@ -29,6 +42,11 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'категория'
         verbose_name_plural = 'категории'
+        permissions = [
+            ('set_product_status', 'Can change the status of products'),
+            ('change_product_description', 'Can change product description'),
+            ('change_product_category', 'Can change product category'),
+        ]
 
 
 class Version(models.Model):
