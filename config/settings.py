@@ -11,16 +11,19 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&o65jrye7i4ho%a=ywjau^kl4*8n4*%mv=#-4q+y=%*cc0shqj'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -142,6 +145,15 @@ LOGIN_URL = '/users/'
 
 EMAIL_USE_SSL = True
 EMAIL_HOST = "smtp.yandex.ru"
-EMAIL_HOST_USER = 'abelov67@yandex.ru'
-EMAIL_HOST_PASSWORD = 'qwertyqwerty'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 465
+
+
+CACHE_ENABLED = os.getenv('CACHE_ENABLED') == '1'
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': os.getenv('CACHE_LOCATION')
+    }
+}

@@ -1,4 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+from django.core.cache import cache
 from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -11,13 +13,19 @@ from catalog.forms import ProductForm, VersionForm
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 
+from catalog.services import get_categories_cache
+from config import settings
 
-# def index(request):
-#     context = {
-#         'object_list': Category.objects.all(),
-#         'title': 'Pets shop - главная'
-#     }
-#     return render(request, 'catalog/index.html', context)
+
+@login_required
+def categories(request):
+
+    context = {
+        'object_list': get_categories_cache(),
+        'title': 'Каталог - наши товары'
+    }
+    return render(request, 'catalog/category_list.html', context)
+
 
 class IndexView(ListView):
     template_name = 'catalog/index.html'
@@ -39,12 +47,12 @@ class IndexView(ListView):
         return queryset
 
 
-class CategoryListView(ListView):
-    template_name = 'catalog/category_list.html'
-    model = Category
-    extra_context = {
-        'title': 'Каталог - наши товары'
-    }
+# class CategoryListView(ListView):
+#     template_name = 'catalog/category_list.html'
+#     model = Category
+#     extra_context = {
+#         'title': 'Каталог - наши товары'
+#     }
 
 
 class ProductListView(ListView):
